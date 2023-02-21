@@ -1,0 +1,46 @@
+﻿using MongoDB.Driver;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Nc1Ex1Server
+{
+    class Mdb1
+    {
+        public const string
+            Dbn = "UnityDb1",
+            Clcn = "Clc1";
+
+        public static IMongoDatabase DbCon1(string dbn = Dbn)
+        {
+            var client = new MongoClient("mongodb://127.0.0.1:27017");
+            var database = client.GetDatabase(dbn);
+            return database;
+        }
+
+        public static void DbEx_InsertBson1()
+        {
+            var db1 = DbCon1();
+            var clc1 = db1.GetCollection<MongoDB.Bson.BsonDocument>(Clcn);
+
+            var rand = new Random(DateTime.Now.Millisecond);
+            var bd1 = new MongoDB.Bson.BsonDocument();
+            bd1.Set("Name", "bsonnn");
+            bd1.Set("Age", rand.Next());
+            clc1.InsertOne(bd1);
+        }
+        public static void DbEx_UpdateBson1()
+        {
+            var db1 = DbCon1();
+            var clc1 = db1.GetCollection<MongoDB.Bson.BsonDocument>(Clcn);
+
+            var rand = new Random(DateTime.Now.Millisecond);
+            var ft1 = Builders<MongoDB.Bson.BsonDocument>.Filter.Eq("Name", "bsonnn");
+            var us1 = Builders<MongoDB.Bson.BsonDocument>.Update.Set("Age", rand.Next());
+            clc1.UpdateOne(ft1, us1);
+        }
+
+    }
+}
