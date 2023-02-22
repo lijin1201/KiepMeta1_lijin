@@ -38,6 +38,15 @@
 ### 김규환
 - webserver에서 Quiz데이터 생성 연결 1일, 미완료
 
+### 이동규
+- webserver와 db연결 작업 1일, 미완
+- web 꾸미기 작업 2일, 미완
+- web quiz data db에 채우기 1일, 미완
+- web 메타버스의 object를 db에 채우기 1일, 미완
+- web과 server 연결 작업 1일, 미완
+- server와 unity가 연결되는지 확인 1일, 미완
+- web에서 받은 데이터를 unity에 배치가 되는지 확인 1일, 미완
+
 # 작업일지
 
 ## 20230220
