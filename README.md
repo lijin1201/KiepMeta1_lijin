@@ -3,7 +3,7 @@
 ## [PM,기획 - 조여준]
  
 아래의 내용에 영향이 있을 경우 먼저 상의하고 진행
- https://open.kakao.com/o/gJwbSz4e
+( https://open.kakao.com/o/gJwbSz4e )
 
 ### 기획관련
  수업중에 배운 기술들을 기반으로하고 학생들 스스로 확장하며 실력을 올릴 수 있는 범위.
