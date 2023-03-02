@@ -110,3 +110,4 @@ ExportedObj/
 /KpmvNclib/Nc1Ex1Server/bin
 /KpmvNclib/Nc1Ex1Server/obj
 /KpmvNclib/packages
+*.meta
