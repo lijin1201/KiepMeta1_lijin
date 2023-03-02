@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class LcIPT : MonoBehaviour
 {
-    public float jumpHeight = 2f;
+    const bool mbOnline = false;
+    public float mJumpHeight = 2f;
 
     void Start()
     {
@@ -30,8 +31,7 @@ public class LcIPT : MonoBehaviour
 
     void Move()
     {
-
-        bool bOnline = false;
+        float spd = 10.0f * Time.deltaTime;
         var go = GameObject.Find("Player");
 
         if (go)
@@ -39,64 +39,64 @@ public class LcIPT : MonoBehaviour
 
             if (Input.GetKey(KeyCode.W))
             {
-                if (bOnline)
+                if (mbOnline)
                 {
-                    moveSend(null, go, 0, 0, +0.1f);
+                    moveSend(null, go, 0, 0, +spd);
                 }
                 else
                 {
-                    go.GetComponent<PlayerMotion>().zeroVec = new Vector3(0, 0, +0.1f);
-                    go.transform.position += new Vector3(0, 0, +0.1f);
+                    go.GetComponent<PlayerMotion>().zeroVec = new Vector3(0, 0, +spd);
+                    go.transform.position += new Vector3(0, 0, +spd);
                 }
             }
             if (Input.GetKey(KeyCode.S))
             {
-                if (bOnline)
+                if (mbOnline)
                 {
-                    moveSend(null, go, 0, 0, -0.1f);
+                    moveSend(null, go, 0, 0, -spd);
                 }
                 else
                 {
-                    go.GetComponent<PlayerMotion>().zeroVec = new Vector3(0, 0, -0.1f);
-                    go.transform.position += new Vector3(0, 0, -0.1f);
+                    go.GetComponent<PlayerMotion>().zeroVec = new Vector3(0, 0, -spd);
+                    go.transform.position += new Vector3(0, 0, -spd);
                 }
             }
             if (Input.GetKey(KeyCode.A))
             {
-                if (bOnline)
+                if (mbOnline)
                 {
-                    moveSend(null, go, -0.1f, 0, 0);
+                    moveSend(null, go, -spd, 0, 0);
                 }
                 else
                 {
-                    go.GetComponent<PlayerMotion>().zeroVec = new Vector3(-0.1f, 0, 0);
-                    go.transform.position += new Vector3(-0.1f, 0, 0);
+                    go.GetComponent<PlayerMotion>().zeroVec = new Vector3(-spd, 0, 0);
+                    go.transform.position += new Vector3(-spd, 0, 0);
                 }
             }
             if (Input.GetKey(KeyCode.D))
             {
-                if (bOnline)
+                if (mbOnline)
                 {
-                    moveSend(null, go, +0.1f, 0, 0);
+                    moveSend(null, go, +spd, 0, 0);
                 }
                 else
                 {
-                    go.GetComponent<PlayerMotion>().zeroVec = new Vector3(+0.1f, 0, 0);
-                    go.transform.position += new Vector3(+0.1f, 0, 0);
+                    go.GetComponent<PlayerMotion>().zeroVec = new Vector3(+spd, 0, 0);
+                    go.transform.position += new Vector3(+spd, 0, 0);
                 }
             }
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 if (go.GetComponent<PlayerMotion>().isGrounded)
                 {
-                    if (bOnline)
+                    if (mbOnline)
                     {
-                        moveSend(null, go, 0, jumpHeight, 0);
+                        moveSend(null, go, 0, mJumpHeight, 0);
                     }
                     else
                     {
                         Rigidbody rb = go.GetComponent<Rigidbody>();
-                        rb.AddForce(Vector3.up * Mathf.Sqrt(jumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
+                        rb.AddForce(Vector3.up * Mathf.Sqrt(mJumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
                     }
                     go.GetComponent<PlayerMotion>().isGrounded = false;
                 }
