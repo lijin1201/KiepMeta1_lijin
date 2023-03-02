@@ -111,3 +111,11 @@ ExportedObj/
 /KpmvNclib/Nc1Ex1Server/obj
 /KpmvNclib/packages
 *.meta
+/KpmvUnity/Library/PackageCache
+/KpmvUnity/Library/Artifacts
+/KpmvUnity/Library/ShaderCache
+/KpmvUnity/Library/StateCache
+/KpmvUnity/Library/TempArtifacts
+/KpmvUnity/Library/Bee
+/KpmvUnity/Library/ArtifactDB-lock
+/KpmvUnity/Library/SourceAssetDB-lock
