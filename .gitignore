@@ -37,7 +37,7 @@ next-env.d.ts
 
 /KpmvNext/package-lock.json
 
-/KpmvUnity/[Ll]ibrary/
+#/KpmvUnity/[Ll]ibrary/
 /KpmvUnity/[Tt]emp/
 /KpmvUnity/[Oo]bj/
 /KpmvUnity/[Bb]uild/
