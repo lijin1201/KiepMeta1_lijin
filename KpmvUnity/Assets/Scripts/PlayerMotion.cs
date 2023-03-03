@@ -95,7 +95,7 @@ public class PlayerMotion : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Floor"))
+        if (collision.gameObject.CompareTag("Floor")) //바닥 태그 추가
         {
             isGrounded = true;
         }
