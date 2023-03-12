@@ -6,16 +6,20 @@ public class TerrainGenerator : MonoBehaviour
 {
     public GameObject wallChunk;
     public GameObject terrainChunk;
+    public GameObject CenterWall;
 
     public Vector3 center;
+    int curChunkPosX;
+    int curChunkPosZ;
+    int[] cWallPosX = new int[2];
+    int[] cWallPosZ = new int[2];
 
     public static Dictionary<ChunkPos, TerrainChunk> chunks = new Dictionary<ChunkPos, TerrainChunk>();
 
+    System.Random rand = new System.Random( 20000 );
     FastNoise noise = new FastNoise();
 
     int chunkDist = 6;
-
-    List<TerrainChunk> pooledChunks = new List<TerrainChunk>();
 
     List<ChunkPos> toGenerate = new List<ChunkPos>();
 
@@ -37,19 +41,9 @@ public class TerrainGenerator : MonoBehaviour
     void BuildChunk(int xPos, int zPos)
     {
         TerrainChunk chunk;
-        if (pooledChunks.Count > 0)//look in the poo first
-        {
-            chunk = pooledChunks[0];
-            chunk.gameObject.SetActive(true);
-            pooledChunks.RemoveAt(0);
-            chunk.transform.position = new Vector3(xPos, 0, zPos);
-        }
-        else
-        {
-            GameObject chunkGO = Instantiate(terrainChunk, new Vector3(xPos, 0, zPos), Quaternion.identity);
-            chunk = chunkGO.GetComponent<TerrainChunk>();
-        }
-
+    
+        GameObject chunkGO = Instantiate(terrainChunk, new Vector3(xPos, 0, zPos), Quaternion.identity);
+        chunk = chunkGO.GetComponent<TerrainChunk>();
 
         for (int x = 0; x < TerrainChunk.chunkWidth + 2; x++)
             for (int z = 0; z < TerrainChunk.chunkWidth + 2; z++)
@@ -59,9 +53,8 @@ public class TerrainGenerator : MonoBehaviour
                     chunk.blocks[x, y, z] = GetBlockType(xPos + x - 1, y, zPos + z - 1);
                 }
 
-
-        GenerateStructures(chunk.blocks, xPos, zPos);
-
+        if ( ! (xPos >= cWallPosX[0] && xPos < cWallPosX[1] && zPos >= cWallPosZ[0] && zPos <cWallPosZ[1]) )
+            GenerateStructures(chunk.blocks, xPos, zPos);
     
         chunk.BuildMesh();
 
@@ -77,9 +70,16 @@ public class TerrainGenerator : MonoBehaviour
 
 
     //get the block type at a specific coordinate
-    BlockType GetBlockType(int x, int y, int z)
+    BlockType GetBlockType(int realx, int y, int realz)
     {
-    
+        int x, z;
+        if (realx < cWallPosX[0]) { x = realx - cWallPosX[0] + curChunkPosX; }
+        else if (realx < cWallPosX[1]) { x = curChunkPosX; }
+        else { x = realx - cWallPosX[1] + curChunkPosX; }
+
+        if (realz < cWallPosZ[0]) { z = realz - cWallPosZ[0] + curChunkPosZ; }
+        else if (realz < cWallPosZ[1]) { z = curChunkPosZ; }
+        else { z = realz - cWallPosZ[1] + curChunkPosZ; }
         //print(noise.GetSimplex(x, z));
         float simplex1 = noise.GetSimplex(x * .8f, z * .8f) * 10;
         float simplex2 = noise.GetSimplex(x * 3f, z * 3f) * 5 * (noise.GetSimplex(x * .3f, z * .3f) + .5f);
@@ -127,8 +127,8 @@ public class TerrainGenerator : MonoBehaviour
     void LoadChunks()
     {
         //the current chunk the player is in
-        int curChunkPosX = Mathf.FloorToInt(center.x / TerrainChunk.chunkWidth ) * TerrainChunk.chunkWidth;
-        int curChunkPosZ = Mathf.FloorToInt(center.z / TerrainChunk.chunkWidth) * TerrainChunk.chunkWidth;
+        curChunkPosX = Mathf.FloorToInt(center.x / TerrainChunk.chunkWidth ) * TerrainChunk.chunkWidth;
+        curChunkPosZ = Mathf.FloorToInt(center.z / TerrainChunk.chunkWidth) * TerrainChunk.chunkWidth;
 
         
         //Generate Walls:
@@ -144,10 +144,19 @@ public class TerrainGenerator : MonoBehaviour
         WallChunk wall = wallG.GetComponent<WallChunk>();
         wall.setRange(rangeChunkPosX, rangeChunkPosZ);
         wall.BuildMesh();
-        
-        
-        
 
+        //center wall:
+        
+        cWallPosX[0] = curChunkPosX - TerrainChunk.chunkWidth;
+        cWallPosX[1] = curChunkPosX + 2 * TerrainChunk.chunkWidth;
+        cWallPosZ[0] = curChunkPosZ ;
+        cWallPosZ[1] = curChunkPosZ + TerrainChunk.chunkWidth;
+        //GameObject cWall1z1 = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        //cwall.getcomponent<meshcollider>().enabled = false;
+        //cwall.getcomponent<renderer>().material.setcolor("_color", new color(0.7f, 0.7f, 0.2f, 0.2f)) ;
+        //cwall.getcomponent<renderer>().material.setfloat("_mode", 3); //transparent
+
+        
         for (int i = curChunkPosX - TerrainChunk.chunkWidth * chunkDist; i <= curChunkPosX + TerrainChunk.chunkWidth * chunkDist; i += TerrainChunk.chunkWidth)
             for (int j = curChunkPosZ - TerrainChunk.chunkWidth * chunkDist; j <= curChunkPosZ + TerrainChunk.chunkWidth * chunkDist; j += TerrainChunk.chunkWidth)
             {
@@ -165,6 +174,26 @@ public class TerrainGenerator : MonoBehaviour
             }
 
 
+
+        int y = TerrainChunk.chunkHeight - 1;
+        //find the ground
+        TerrainChunk cBlock = chunks[new ChunkPos(curChunkPosX, curChunkPosZ)];
+        while (y > 0 && (cBlock.blocks[0, y, 0] == BlockType.Air || cBlock.blocks[0, y, 0] == BlockType.Trunk || cBlock.blocks[0, y, 0] == BlockType.Leaves))
+        {
+            y--;
+        }
+        y++;
+
+        GameObject cWallz0 = Instantiate(CenterWall, new Vector3(curChunkPosX + TerrainChunk.chunkWidth / 2, y+1 , cWallPosZ[0]), Quaternion.identity);
+        cWallz0.transform.localScale = new Vector3(3 * TerrainChunk.chunkWidth, 2, 0.01f);
+        GameObject cWallz1 = Instantiate(CenterWall, new Vector3(curChunkPosX + TerrainChunk.chunkWidth / 2, y+1, cWallPosZ[1]), Quaternion.identity);
+        cWallz1.transform.localScale = new Vector3(3 * TerrainChunk.chunkWidth, 2, 0.01f);
+        GameObject cWallx0 = Instantiate(CenterWall, new Vector3(cWallPosX[0], y+1 , curChunkPosZ + TerrainChunk.chunkWidth / 2), Quaternion.identity);
+        cWallx0.transform.localScale = new Vector3(0.01f, 2, TerrainChunk.chunkWidth);
+        GameObject cWallx1 = Instantiate(CenterWall, new Vector3(cWallPosX[1], y+1, curChunkPosZ + TerrainChunk.chunkWidth / 2), Quaternion.identity);
+        cWallx1.transform.localScale = new Vector3(0.01f, 2 , TerrainChunk.chunkWidth);
+
+
         StartCoroutine(DelayBuildChunks());
        
 
@@ -175,13 +204,12 @@ public class TerrainGenerator : MonoBehaviour
 
     void GenerateStructures(BlockType[,,] blocks, int x, int z)
     {
-        System.Random rand = new System.Random(x * 20000 + z);
         int structureCount = Mathf.FloorToInt((float)rand.NextDouble() * 2);
 
         int structureHeight = 2;
 
-        int xPos = (int)(rand.NextDouble() * 13) + 2;
-        int zPos = (int)(rand.NextDouble() * 13) + 2;
+        int xPos = (int)(rand.NextDouble() * (TerrainChunk.chunkWidth - 3)) + 2;
+        int zPos = (int)(rand.NextDouble() * (TerrainChunk.chunkWidth - 3)) + 2;
 
         // if (xPos >= 1 || xPos < 15 || zPos >= 1 || zPos < 15) { return; }
         int y = TerrainChunk.chunkHeight - 1;
