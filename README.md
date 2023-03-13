@@ -37,13 +37,11 @@
 - 테스트 1일, 완료
 
 ### 이동규
-- webserver와 db연결 작업 1일, 미완
-- web 꾸미기 작업 2일, 미완
-- web quiz data db에 채우기 1일, 미완
-- web 메타버스의 object를 db에 채우기 1일, 미완
-- web과 server 연결 작업 1일, 미완
-- server와 unity가 연결되는지 확인 1일, 미완
-- web에서 받은 데이터를 unity에 배치가 되는지 확인 1일, 미완
+- webserver와 db연결 작업 1일, 완료
+- web 꾸미기 작업 2일, 완료
+- web quiz data db에 채우기 1일, 완료
+- web과 server 연결 작업 1일, 완료
+- 로그인 화면 구성 3일, 미완
 
 ### 리진
 - 서버 연동 (캐릭터 실시간 위치, 상태 등): 1일, 완료.
