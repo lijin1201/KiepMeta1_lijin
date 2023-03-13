@@ -19,6 +19,10 @@
  
  
 #### [NftProject용 Quiz대회]
+- 공통
+  
+  완료일정: 3.21일
+  
 - Webservice
 
   NFT발행 "제x회 Quiz대회 우승 트로피" + 고유 트로피 image지정.
