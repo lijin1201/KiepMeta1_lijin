@@ -38,7 +38,7 @@
  
   NFT id 또는 사용자 이름으로 NFT정보 조회 (NFT이름, 소유자, image 등)
   
-  역대 수상 목록과 정보(NFT id, 수령EOA, 수령자)
+  역대 수상 목록과 정보(NFT이름, NFT id, 수령EOA, 수령자)
 
 - Metaverse
 
