@@ -130,6 +130,7 @@
     이동규 : db에서 받아온 text를 유니티에서 출력하는 코드 작성
       유니티에서 실행전 서버 연결 필수
       한글 폰트 설치 필요
-![20230316_115938](https://user-images.githubusercontent.com/104874755/225545667-468270fd-ed90-459d-8954-ca55dae85e9c.jpg )
+![image](https://user-images.githubusercontent.com/104874755/225546756-893c48a6-6777-4551-a68b-774b4cb31b8b.png)
+
   ## 20230317
     오전 테스트 계획
