@@ -12,6 +12,7 @@ namespace Nc1Ex1Server
 		public class Sv : NccpcDll.NccpcNw1Sv
 		{
 			public List<int> mCs = new List<int>();
+			public NetworkTextTestExample mNtte = new NetworkTextTestExample();
 			public NccpcDll.NccpcMemmgr2Mgr mMm;
 
 			public int mObjX = 0, mObjY = 0;
@@ -24,6 +25,8 @@ namespace Nc1Ex1Server
 
 			public bool create()
 			{
+				mNtte.Db();
+
 				if (!mMm.create()) { return false; }
 
 				var co = new NccpcDll.NccpcNw1Sv.CreateOptions(mMm, "7777");
@@ -45,15 +48,15 @@ namespace Nc1Ex1Server
 			public override void onNccpcNwEnter(int cti, string peer) {
 				qv("Dbg NwEnter ct:" + cti + " Peer:" + peer);
 				mCs.Add(cti);
-
-				using (var pkw = mMm.allocNw1pk(0xff)) {
+				mNtte.QuizDataSend(this, cti);
+				/*using (var pkw = mMm.allocNw1pk(0xff)) {
 					pkw.setType(100);
 					pkw.wStrToNclib1FromClr("Name"+cti);
 					pkw.wInt32s(mObjX);
 					pkw.wInt32s(mObjY);
 					//send(mCs, pkw);
 					send(cti, pkw);
-				}
+				}*/
 			}
 			//public override NccpcMemmgr2Obj1 onNccpcNwEncode(int cti, int out desclen, NccpcMemmgr2Obj1 srcobj, int srclen, unsigned char cft) { return null; }
 			//public override NccpcMemmgr2Obj1 onNccpcNwDecode(int cti, int out desclen, NccpcNw1StreamWar1 srcsw, unsigned char cft) { return null; }
@@ -75,15 +78,15 @@ namespace Nc1Ex1Server
 
 			qv("Dbg mongodb rst");
 			//Mdb1.DbEx_Insert1();
-			int objx = 10; // Mdb1.DbEx_FindObjX("Obj1");
-			qv("Dbg mongodb objx:" + objx);
+			//int objx = 10; // Mdb1.DbEx_FindObjX("Obj1");
+			//qv("Dbg mongodb objx:" + objx);
 
 			var sv = new Sv();
 
 			qv("Dbg server starting");
 
 			if (!sv.create()) { return; }
-			sv.mObjX = objx;
+			//sv.mObjX = objx;
 
 			qv("Dbg server started");
 
