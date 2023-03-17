@@ -141,3 +141,6 @@
 
   ## 20230317
     오전 테스트 계획
+    
+    김규환(커밋 시간 14:30) : 데이터 저장시 (데이터베이스 이름 test, 콜렉션 이름 quiz / String : content, answer사용) 
+    (mongodb Document 저장시 - "content":"문제", "answer":"O" (O, X로 고정)
