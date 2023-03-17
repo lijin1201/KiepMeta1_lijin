@@ -15,8 +15,6 @@ namespace Nc1Ex1Server
 			public NetworkTextTestExample mNtte = new NetworkTextTestExample();
 			public NccpcDll.NccpcMemmgr2Mgr mMm;
 
-			public int mObjX = 0, mObjY = 0;
-
 			public Sv()
 				: base()
 			{
@@ -93,7 +91,7 @@ namespace Nc1Ex1Server
 			bool bWhile = true;
 			while (bWhile)
 			{
-				sv.framemove();
+				sv.	();
 
 				System.Threading.Thread.Sleep(100);
 			}

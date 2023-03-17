@@ -6,6 +6,8 @@ public class PlayerMotion : MonoBehaviour
 
     public Vector3 zeroVec;
 
+    public GameObject terrain; // Generator;
+
     private Rigidbody rigid;
     private Animator anim;
 
@@ -19,6 +21,8 @@ public class PlayerMotion : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody>();
         anim = GetComponentInChildren<Animator>();
+        terrain = GameObject.Find("Terrain");
+
     }
 
     private void Update()
@@ -30,16 +34,20 @@ public class PlayerMotion : MonoBehaviour
 
     private void Move()
     {
+
+
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
         {
             anim.SetBool("Run", true);
             anim.SetBool("Hello", false);
             anim.SetBool("Win", false);
             anim.SetBool("Lose", false);
+            rigid.velocity += new Vector3(0, 0f, 0);
         }
         else
         {
             anim.SetBool("Run", false);
+            rigid.velocity += new Vector3(0, -0.2f, 0);
         }
     }
 
@@ -95,9 +103,25 @@ public class PlayerMotion : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Floor")) //바닥 태그 추가 (태그 추가시 || 사용)
+        if (collision.gameObject.CompareTag("Floor")|| collision.gameObject.CompareTag("Quiz") || collision.gameObject.CompareTag("Die")) //바닥 태그 추가 (태그 추가시 || 사용)
         {
             isGrounded = true;
+        }
+    }
+    void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Quiz"))
+        {
+            Debug.Log("선택");
+        }
+        if (collision.gameObject.CompareTag("Die"))
+        {
+            Debug.Log("충돌중");
+            transform.position = new Vector3(8, 30, -12);
+        }
+        if (collision.gameObject.CompareTag("Respawn"))
+        {
+            transform.position = new Vector3(8, 30, -12);
         }
     }
 }

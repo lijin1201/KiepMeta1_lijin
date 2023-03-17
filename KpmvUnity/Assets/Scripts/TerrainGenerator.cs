@@ -6,7 +6,15 @@ public class TerrainGenerator : MonoBehaviour
 {
     public GameObject wallChunk;
     public GameObject terrainChunk;
-    public GameObject CenterWall;
+    public GameObject mCenterWall;
+    public TerrainChunk mOFloor;
+    public TerrainChunk mXFloor;
+    public TerrainChunk mCenterFloor;
+
+    public GameObject cWallz0;
+    public GameObject cWallz1;
+    public GameObject cWallx0;
+    public GameObject cWallx1;
 
     public Vector3 center;
     int curChunkPosX;
@@ -28,15 +36,15 @@ public class TerrainGenerator : MonoBehaviour
     {
         center = new Vector3();
         LoadChunks();
-    }
 
-
-    private void Update()
-    {
-       
-    }
-
-
+        mOFloor = chunks[new ChunkPos(curChunkPosX - TerrainChunk.chunkWidth, curChunkPosZ)];
+        mCenterFloor = chunks[new ChunkPos(curChunkPosX, curChunkPosZ)];
+        mXFloor = chunks[new ChunkPos(curChunkPosX + TerrainChunk.chunkWidth, curChunkPosZ)];
+        Debug.Log("============"+mOFloor);
+        mOFloor.gameObject.tag="Quiz";
+        mCenterFloor.gameObject.tag="Quiz";
+        mXFloor.gameObject.tag="Quiz";
+    }   
 
     void BuildChunk(int xPos, int zPos)
     {
@@ -127,10 +135,10 @@ public class TerrainGenerator : MonoBehaviour
     void LoadChunks()
     {
         //the current chunk the player is in
-        curChunkPosX = Mathf.FloorToInt(center.x / TerrainChunk.chunkWidth ) * TerrainChunk.chunkWidth;
+        curChunkPosX = Mathf.FloorToInt(center.x / TerrainChunk.chunkWidth) * TerrainChunk.chunkWidth;
         curChunkPosZ = Mathf.FloorToInt(center.z / TerrainChunk.chunkWidth) * TerrainChunk.chunkWidth;
 
-        
+
         //Generate Walls:
 
         int[] rangeChunkPosX = new int[2];
@@ -146,17 +154,17 @@ public class TerrainGenerator : MonoBehaviour
         wall.BuildMesh();
 
         //center wall:
-        
+
         cWallPosX[0] = curChunkPosX - TerrainChunk.chunkWidth;
         cWallPosX[1] = curChunkPosX + 2 * TerrainChunk.chunkWidth;
-        cWallPosZ[0] = curChunkPosZ ;
+        cWallPosZ[0] = curChunkPosZ;
         cWallPosZ[1] = curChunkPosZ + TerrainChunk.chunkWidth;
         //GameObject cWall1z1 = GameObject.CreatePrimitive(PrimitiveType.Cube);
         //cwall.getcomponent<meshcollider>().enabled = false;
         //cwall.getcomponent<renderer>().material.setcolor("_color", new color(0.7f, 0.7f, 0.2f, 0.2f)) ;
         //cwall.getcomponent<renderer>().material.setfloat("_mode", 3); //transparent
 
-        
+
         for (int i = curChunkPosX - TerrainChunk.chunkWidth * chunkDist; i <= curChunkPosX + TerrainChunk.chunkWidth * chunkDist; i += TerrainChunk.chunkWidth)
             for (int j = curChunkPosZ - TerrainChunk.chunkWidth * chunkDist; j <= curChunkPosZ + TerrainChunk.chunkWidth * chunkDist; j += TerrainChunk.chunkWidth)
             {
@@ -184,18 +192,22 @@ public class TerrainGenerator : MonoBehaviour
         }
         y++;
 
-        GameObject cWallz0 = Instantiate(CenterWall, new Vector3(curChunkPosX + TerrainChunk.chunkWidth / 2, y+1 , cWallPosZ[0]), Quaternion.identity);
-        cWallz0.transform.localScale = new Vector3(3 * TerrainChunk.chunkWidth, 2, 0.01f);
-        GameObject cWallz1 = Instantiate(CenterWall, new Vector3(curChunkPosX + TerrainChunk.chunkWidth / 2, y+1, cWallPosZ[1]), Quaternion.identity);
-        cWallz1.transform.localScale = new Vector3(3 * TerrainChunk.chunkWidth, 2, 0.01f);
-        GameObject cWallx0 = Instantiate(CenterWall, new Vector3(cWallPosX[0], y+1 , curChunkPosZ + TerrainChunk.chunkWidth / 2), Quaternion.identity);
-        cWallx0.transform.localScale = new Vector3(0.01f, 2, TerrainChunk.chunkWidth);
-        GameObject cWallx1 = Instantiate(CenterWall, new Vector3(cWallPosX[1], y+1, curChunkPosZ + TerrainChunk.chunkWidth / 2), Quaternion.identity);
-        cWallx1.transform.localScale = new Vector3(0.01f, 2 , TerrainChunk.chunkWidth);
+        cWallz0 = Instantiate(mCenterWall, new Vector3(curChunkPosX + TerrainChunk.chunkWidth / 2, y + 4, cWallPosZ[0]), Quaternion.identity);
+        cWallz0.transform.localScale = new Vector3(3 * TerrainChunk.chunkWidth, 7, 0.01f);
+        cWallz1 = Instantiate(mCenterWall, new Vector3(curChunkPosX + TerrainChunk.chunkWidth / 2, y + 4, cWallPosZ[1]), Quaternion.identity);
+        cWallz1.transform.localScale = new Vector3(3 * TerrainChunk.chunkWidth, 7, 0.01f);
+        cWallx0 = Instantiate(mCenterWall, new Vector3(cWallPosX[0], y + 4, curChunkPosZ + TerrainChunk.chunkWidth / 2), Quaternion.identity);
+        cWallx0.transform.localScale = new Vector3(0.01f, 7, TerrainChunk.chunkWidth);
+        cWallx1 = Instantiate(mCenterWall, new Vector3(cWallPosX[1], y + 4, curChunkPosZ + TerrainChunk.chunkWidth / 2), Quaternion.identity);
+        cWallx1.transform.localScale = new Vector3(0.01f, 7, TerrainChunk.chunkWidth);
 
+        cWallz0.GetComponent<MeshRenderer>().enabled = false; cWallz0.GetComponent<BoxCollider>().enabled = false;
+        cWallz1.GetComponent<MeshRenderer>().enabled = false; cWallz1.GetComponent<BoxCollider>().enabled = false;
+        cWallx0.GetComponent<MeshRenderer>().enabled = false; cWallx0.GetComponent<BoxCollider>().enabled = false;
+        cWallx1.GetComponent<MeshRenderer>().enabled = false; cWallx1.GetComponent<BoxCollider>().enabled = false;
 
         StartCoroutine(DelayBuildChunks());
-       
+
 
     }
 

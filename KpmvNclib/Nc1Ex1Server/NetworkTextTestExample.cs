@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Nc1Ex1Server
+
 {
     class NetworkTextTestExample
     {
@@ -17,7 +18,8 @@ namespace Nc1Ex1Server
             foreach (var d1 in mList)
             {
                 var s1 = d1.GetValue("content");
-                Nc1Ex1ServerMainAm2.qv("Dbg mongodb content " + s1);
+                var s2 = d1.GetValue("answer");
+                Nc1Ex1ServerMainAm2.qv("Dbg mongodb content " + s1 + " : " + s2);
             }
             return mList;
         }
@@ -31,8 +33,8 @@ namespace Nc1Ex1Server
                 pkw.wInt32s(mList.Count);
                 foreach (var d1 in mList)
                 {
-                    pkw.wStrToNclib1FromClr((string)d1.GetValue("answer"));
                     pkw.wStrToNclib1FromClr((string)d1.GetValue("content"));
+                    pkw.wStrToNclib1FromClr((string)d1.GetValue("answer"));
                 }
                 sv.send(cti, pkw);
             }

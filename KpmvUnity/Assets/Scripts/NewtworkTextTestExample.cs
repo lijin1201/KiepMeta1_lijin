@@ -12,7 +12,7 @@ namespace TextTest
 		static public void qv(string s1) { Debug.Log(s1); }
 		public class Obj1
 		{
-			public string mName, mContent;
+			public string mContent, mAnswer;
 		}
 
 		public class Client : JcCtUnity1.JcCtUnity1
@@ -58,8 +58,8 @@ namespace TextTest
 								s2 = pkrd.rStr1def();
 
 								qv("ServerEnter ¼ö½Å s1: " + s1 + " s2 : " + s2);
-								mObj1.mName = s1;
-								mObj1.mContent = s2;
+								mObj1.mContent = s1;
+								mObj1.mAnswer = s2;
 								dbList.Add(mObj1);
 								qv("dbList : " + dbList.Count);
 							}
@@ -72,7 +72,6 @@ namespace TextTest
 
 		// Start is called before the first frame update
 		Client mCt;
-		public List<GameObject> mOs = new List<GameObject>();
 		static public List<Obj1> dbList;
 		public TextMeshPro tmpUgui;
 		int check = 0;
