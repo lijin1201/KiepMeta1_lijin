@@ -60,6 +60,23 @@ namespace Nc1Ex1Server
 			//public override NccpcMemmgr2Obj1 onNccpcNwDecode(int cti, int out desclen, NccpcNw1StreamWar1 srcsw, unsigned char cft) { return null; }
 			public override void onNccpcNwRecv(int cti, NccpcDll.NccpcNw1Pk2 ncpk) {
 				qv("Dbg NwRecv Type:" + ncpk.getType() + " Len:" + ncpk.getDataLen());
+				if (ncpk.getType() == 111)
+                {
+					string s1 = ncpk.rStrFromNclib1ToClr();
+					float xx =  ncpk.rReal32s();
+					float zz =  ncpk.rReal32s();
+					qv("Dbg NwRecv Type:" + ncpk.getType() + "str: " + s1 + " xx: "+xx + " zz: "+zz);
+					return;
+				} else if (ncpk.getType() == 112)
+				{
+					string s1 = ncpk.rStrFromNclib1ToClr();
+					float xx = ncpk.rReal32s();
+					float zz = ncpk.rReal32s();
+					qv("Dbg NwRecv Type:" + ncpk.getType() + "str: " + s1 + " xx: " + xx + " zz: " + zz);
+					qv("DB save start ....");
+					MineCfDB.DbEx_UpdateObjPos(s1, new float[] { xx, zz });
+					return;
+				}
 				using (var pkw = ncpk.copyDeep()) {
 					send(mCs, pkw);
 				}
