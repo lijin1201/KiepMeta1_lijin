@@ -96,14 +96,13 @@ export default function App1() {
             <table>
             {   
                 // nfts.forEach( (value,key) =>  (<li>"value: " {value} </li>)) 
-                //[...users.keys()].map( (uid) => (   
                 uIDs.map( (uid) => (          
                     <tr>
                         <td>User ID: {uid}</td>
                         <td>Addr: {users.get(uid)['addr'] }</td>
                         <td>  Balance: {users.get(uid)['balance'] }</td>
                     </tr>
-                 ) ) 
+                ) ) 
             }
                
             </table>
