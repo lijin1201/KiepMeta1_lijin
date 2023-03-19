@@ -119,3 +119,5 @@ ExportedObj/
 #/KpmvUnity/Library/Bee
 #/KpmvUnity/Library/ArtifactDB-lock
 #/KpmvUnity/Library/SourceAssetDB-lock
+
+node_modules
