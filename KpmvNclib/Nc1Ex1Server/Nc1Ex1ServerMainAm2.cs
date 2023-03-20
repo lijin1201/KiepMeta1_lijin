@@ -47,6 +47,16 @@ namespace Nc1Ex1Server
 				qv("Dbg NwEnter ct:" + cti + " Peer:" + peer);
 				mCs.Add(cti);
 				mNtte.QuizDataSend(this, cti);
+
+				using (var pkw = mMm.allocNw1pk(0xff))
+				{
+					pkw.setType(2);
+					pkw.wInt32s(mCs.Count);
+					pkw.wInt32s((int)cti);
+					//send(mCs,pkw);  //send to all
+					send(cti, pkw);  //send to one
+				}
+
 				/*using (var pkw = mMm.allocNw1pk(0xff)) {
 					pkw.setType(100);
 					pkw.wStrToNclib1FromClr("Name"+cti);
@@ -108,7 +118,7 @@ namespace Nc1Ex1Server
 			bool bWhile = true;
 			while (bWhile)
 			{
-				sv.	();
+				sv.framemove();
 
 				System.Threading.Thread.Sleep(100);
 			}
