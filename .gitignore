@@ -119,3 +119,7 @@ ExportedObj/
 #/KpmvUnity/Library/Bee
 #/KpmvUnity/Library/ArtifactDB-lock
 #/KpmvUnity/Library/SourceAssetDB-lock
+
+/KpmvNft/*
+!/KpmvNft/contracts
+!/KpmvNft/KpmvNft.txt

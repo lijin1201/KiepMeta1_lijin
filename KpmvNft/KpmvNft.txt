@@ -1,0 +1,16 @@
+1. Ganache 실행하고
+2. HkitNft.sol 를 배포한드 (remix에서)
+3. 배포된 주소를 복사 하고, nftApi4.ts에서 sca 변수에 넣기
+
+
+
+Api 사용:
+
+/api/nftApi4?mint=userid 
+     NFT발행하고 userid에 대한 사용자를 준다
+/api/nftApi4?list=id 
+     id 번재  NFT 정보 조회 (이름, URI, 소요자)
+/api/nftApi4?balance=userid 
+     userid 에 대한 사용자의 주소 과 잔고 조회
+/api/nftApi4?supply  
+    총 발행된 NFT 수
