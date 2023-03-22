@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class QuizStart : MonoBehaviour
 {
+
     public Canvas canvas;
+    public Quiz mQuiz;
 
     private bool isColliding = false;
 
@@ -14,6 +16,7 @@ public class QuizStart : MonoBehaviour
         if (isColliding && Input.GetKeyDown(KeyCode.F))
         {
             canvas.gameObject.SetActive(true);
+            mQuiz.mQuizManager.mRemainCompetitionTime = 5.0f;
         }
 
         DateTime currentTime = DateTime.Now;
