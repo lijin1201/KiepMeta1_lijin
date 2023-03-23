@@ -60,7 +60,10 @@ namespace Nc1Ex1Server
                 {
                     string s1 = ncpk.rStrFromNclib1ToClr();
                     string s2 = ncpk.rStrFromNclib1ToClr();
+                    string s3 = "제6회 메타버스 퀴즈 대회";
+                    Mdb1.DbEx_UpdateTest(s3, s1, s2);
                     qv("Dbg NwRecv Type:" + ncpk.getType() + "name : " + s1 + " addr : " + s2);
+
                     return;
                 }
                 using (var pkw = ncpk.copyDeep())

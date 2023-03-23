@@ -13,7 +13,8 @@ namespace Nc1Ex1Server
         public const string
             Dbn = "test",
             Clcn = "quiz",
-            Clcn1 = "users";
+            Clcn1 = "users",
+            Clcn2 = "nftLists";
 
         public static IMongoDatabase DbCon1(string dbn = Dbn)
         {
@@ -61,14 +62,14 @@ namespace Nc1Ex1Server
             bd1.Set("Age", rand.Next());
             clc1.InsertOne(bd1);
         }
-        public static void DbEx_UpdateBson1()
+        public static void DbEx_UpdateTest(string gameName, string winner, string nftAddr)
         {
             var db1 = DbCon1();
-            var clc1 = db1.GetCollection<MongoDB.Bson.BsonDocument>(Clcn);
+            var clc1 = db1.GetCollection<MongoDB.Bson.BsonDocument>(Clcn2);
 
             var rand = new Random(DateTime.Now.Millisecond);
-            var ft1 = Builders<MongoDB.Bson.BsonDocument>.Filter.Eq("Name", "bsonnn");
-            var us1 = Builders<MongoDB.Bson.BsonDocument>.Update.Set("Age", rand.Next());
+            var ft1 = Builders<MongoDB.Bson.BsonDocument>.Filter.Eq("game", gameName);
+            var us1 = Builders<MongoDB.Bson.BsonDocument>.Update.Set("winner", winner).Set("EOA", nftAddr);
             clc1.UpdateOne(ft1, us1);
         }
 

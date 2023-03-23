@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import {Button, Table, Modal, Dropdown, Form, Accordion, Image, Stack} from 'react-bootstrap';
 import Quiz from './quiz';
 import Time from './time';
+import Competition from "@/pages/competition";
 
 const axios1 = (url: string) => Axios.get(url).then((res) => res.data);
 
@@ -16,6 +17,7 @@ const App1 = () => {
     const [smShow, setSmShow] = useState(false);
     const [smShow2, setSmShow2] = useState(false);
     const handleClose = () => setSmShow(false);
+    const handleClose2 = () => setSmShow2(false);
 
     if (error) {
         return <>error!</>;
@@ -26,7 +28,6 @@ const App1 = () => {
 
     return (
         <>
-            <hr/>
             <div className="d-flex justify-content-center ">
                 <Image
                     src="https://user-images.githubusercontent.com/104874755/224620237-a16af7ef-30ec-4f96-91fe-f48fc31661a3.png"
@@ -36,7 +37,7 @@ const App1 = () => {
             <div className="m-5">
                 <Time/>
             </div>
-            <Stack className="d-flex justify-content-center" direction="horizontal" gap={2}>
+            <Stack className="d-flex justify-content-center" direction="horizontal" gap={3}>
                 {/* 구성요소 드롭다운 */}
                 <div>
                     <Dropdown>
@@ -50,6 +51,7 @@ const App1 = () => {
                 </div>
                 {/* 퀴즈 드롭다운 */}
                 <Quiz/>
+                <Competition/>
             </Stack>
             <br/>
             {/* 목록 아코디언 */}
@@ -72,7 +74,10 @@ const App1 = () => {
                                             <td>{e.y}</td>
                                             <td>
                                                 <Stack direction="horizontal" gap={2}>
-                                                    <Button onClick={() => setSmShow(true)}
+                                                    <Button onClick={() => {
+                                                        setSmShow(true);
+                                                        setipt1(e.name);
+                                                    }}
                                                             className='btn btn-danger'>수정</Button>
                                                     <Button onClick={() => {
                                                         Axios.get("http://localhost:3000/api/metabus?del=" + e.name);
@@ -154,7 +159,7 @@ const App1 = () => {
                     </Form.Group>
                 </Modal.Body>
                 <div className='modal-footer'>
-                    <Button type="button" className='btn btn-secondary' data-bs-dismiss="modal">Close</Button>
+                    <Button type="button" className='btn btn-secondary' data-bs-dismiss="modal" onClick={handleClose2}>Close</Button>
                     <Button className='btn btn-primary' onClick={(e) => {
                         Axios.get("http://localhost:3000/api/metabus?add=" + ipt1 + "&PosX=" + ipt2 + "&PosY=" + ipt3);
                         history.back();

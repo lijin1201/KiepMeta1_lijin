@@ -233,6 +233,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Mdb1.cs" />
+    <Compile Include="MineCfDB.cs" />
     <Compile Include="Nc1Ex1ServerMainAm2.cs" />
     <Compile Include="NetworkTextTestExample.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
