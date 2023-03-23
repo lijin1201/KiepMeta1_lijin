@@ -23,6 +23,7 @@
  
   #### [NftProject용 Quiz대회]
     - 공통
+      온라인 메타버스 Quiz대결 (상금 NFT)
       완료일정: 3.21일
       발표 연습 & 녹화: 3.22일
     - Webservice
