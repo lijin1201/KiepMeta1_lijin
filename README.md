@@ -143,7 +143,11 @@
   ## 20230317
     오전 테스트 계획
     
-    김규환(커밋 시간 14:30) : 데이터 저장시 (데이터베이스 이름 test, 콜렉션 이름 quiz / String : content, answer사용) 
+    김규환(커밋 시간 14:30) : 데이터 저장시 (데이터베이스 이름 test, 콜렉션 이름 quiz / String : content, answer 사용) 
     (mongodb Document 저장시 - "content":"문제", "answer":"O" (O, X로 고정)
     
     이동규 : 웹 서비스 템플릿 구성(대회 시간 지정, 퀴즈 문제 입력 구현)
+    
+  ## 20230322
+    김규환 : 플레이어 데이터 저장 (데이터베이스 이름 test, 콜렉션 이름 users / String : name, nftAddr 사용)   
+    (예 : name : "홍길동", nftAddr : "0xA5f7D1035cCE55C4642639e06994BD946D3ce718")
