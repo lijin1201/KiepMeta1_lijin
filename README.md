@@ -123,7 +123,10 @@
       
     - 화요일21일 완료
       리진: asdf
-      권창범: Blender 캐릭터.fbx 추출 ↔ Unity 연동 및 실행
+      권창범: Blender 캐릭터.fbx 추출 ↔ Unity 연동 및 실행   
+            
+  ![nft_image](https://user-images.githubusercontent.com/86579626/227095263-638a3a44-6aac-42b1-bec5-660f8b589d0e.png)
+  
       김규환: 퀴즈 정상출력 관리, 플레이어 데이터 관리
       반현진: 퀴즈목록  데이터 관리
       송두영: jjj
