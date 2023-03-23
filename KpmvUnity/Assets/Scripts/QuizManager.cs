@@ -25,6 +25,7 @@ public class QuizManager : MonoBehaviour
     public GameObject quizStart;
     public GameObject terrain; // Generator;
     public GameObject winner;
+    public GameObject player;
 
     public GameObject mOobj;
     public GameObject mXobj;

@@ -82,12 +82,13 @@ public class Quiz : MonoBehaviour
         mQuizManager.terrain = GameObject.Find("Terrain");
         mQuizManager.quizStart = GameObject.Find("QuizStart");
         mQuizManager.winner = GameObject.Find("Trophy");
+        mQuizManager.player = GameObject.Find("Player");
     }
 
     void Start()
     {
         mCt = new Client();
-        mCt.connect("127.0.0.1", 7777);
+        mCt.connect("127.0.0.3", 7777);
         Debug.Log("Start 1111");
     }
     
@@ -146,8 +147,9 @@ public class Quiz : MonoBehaviour
                 mQuizManager.mOobj.gameObject.tag = "Quiz";
                 mQuizManager.mXobj.gameObject.tag = "Quiz";
 
-                mQuizManager.winner.GetComponent<Winner>().winner.transform.position = new Vector3(8, 33.5f, 9);
-
+                mQuizManager.player.GetComponent<PlayerMotion>().save = false;
+                mQuizManager.winner.GetComponent<Winner>().isFollowing = false;
+                mQuizManager.winner.GetComponent<Winner>().winner.transform.position = new Vector3(8, 36f, 9);
                 Invoke("ResetQuiz", 5);
             }
         }
@@ -217,7 +219,6 @@ public class Quiz : MonoBehaviour
         mQuizManager.NextAnswerDelayTimeOut = 5.0f; // 다음 문제 시간 초기화
         mQuizManager.gameStarted = false; // 게임 시작 여부 초기화
 
-        mQuizManager.winner.GetComponent<Winner>().winner.transform.position = new Vector3(8, 0f, 9);
         OpenWall();
     }
 }

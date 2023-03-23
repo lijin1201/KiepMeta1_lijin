@@ -8,6 +8,7 @@ TagManager:
   - Quiz
   - Die
   - QuizStart
+  - Win
   layers:
   - Default
   - TransparentFX

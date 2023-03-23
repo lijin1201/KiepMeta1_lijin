@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class QuizStart : MonoBehaviour
 {
-
     public Canvas canvas;
     public Quiz mQuiz;
 

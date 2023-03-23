@@ -12,7 +12,8 @@ namespace Nc1Ex1Server
     {
         public const string
             Dbn = "test",
-            Clcn = "quiz";
+            Clcn = "quiz",
+            Clcn1 = "users";
 
         public static IMongoDatabase DbCon1(string dbn = Dbn)
         {
@@ -35,6 +36,19 @@ namespace Nc1Ex1Server
             }
             return list;
         }
+        public static List<BsonDocument> DbEx_FindPlayer()
+        {
+            List<BsonDocument> list = new List<BsonDocument>();
+            var db1 = DbCon1();
+            var clc1 = db1.GetCollection<BsonDocument>(Clcn1);
+            var docs1 = clc1.Find(new BsonDocument()).ToList();
+            foreach (var d1 in docs1)
+            {
+                list.Add(d1);
+            }
+            return list;
+        }
+
 
         public static void DbEx_InsertBson1()
         {

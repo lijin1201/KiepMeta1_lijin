@@ -6,11 +6,14 @@ public class Winner : MonoBehaviour
 {
     public GameObject winner;
 
-    private void OnCollisionEnter(Collision collision)
+    public Transform target;
+    public bool isFollowing;
+
+    void Update()
     {
-        if (collision.gameObject.tag == "Player")
+        if (isFollowing)
         {
-            Debug.Log("충돌한 오브젝트의 이름: " + collision.collider.gameObject.name);
+            winner.transform.position = new Vector3(target.position.x, target.position.y + 2.5f, target.position.z);
         }
     }
 
