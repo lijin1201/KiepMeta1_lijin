@@ -10,6 +10,11 @@ public class QuizStart : MonoBehaviour
 
     private bool isColliding = false;
 
+    void Awake()
+    {
+        mQuiz = GameObject.FindObjectOfType<Quiz>();
+    }
+
     private void Update()
     {
         if (isColliding && Input.GetKeyDown(KeyCode.F))

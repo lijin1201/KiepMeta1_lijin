@@ -16,9 +16,9 @@ public class QuizManager : MonoBehaviour
         Result,
         End,
     }
-    
+
     CompetitionState mState;
-    
+
     public TextMeshProUGUI quizText;
     public Canvas canvas;
 
@@ -39,12 +39,12 @@ public class QuizManager : MonoBehaviour
     public float mAnswerTimeOut = 5.0f; // 문제 시간
     public float NextAnswerDelayTimeOut = 5.0f; // 다음 문제 시간
     public bool gameStarted = false; // 게임 시작 여부
-   
+
     public int quizCount = 3; // 나올 문제 수
     public int mCurrentQuizIndex = 0; // 지금 퀴즈 인덱스
     public bool cleanFloor = true;
-    public static List<Quiz.Obj1> dbList = new List<Quiz.Obj1>();
-    
+    public static List<MainClient.Obj1> dbList = new List<MainClient.Obj1>();
+
 
     public string getAnswer()
     {
@@ -100,13 +100,13 @@ public class QuizManager : MonoBehaviour
         return mRemainCompetitionTime;
     }
 
-    public bool nextAnswer() 
+    public bool nextAnswer()
     {
-        
+
         /*if (userQuiz.Contains(quizIndex)){
             quizIndex = Random.Range(0, dbList.Count);
         }*/
-        
+
         userQuiz.Add(mCurrentQuizIndex);
         curQuiz = mCurrentQuizIndex;
         mAnswerTimeOut = 5.0f;
@@ -126,7 +126,7 @@ public class QuizManager : MonoBehaviour
         //게임 시작조건 :
         //남은 퀴즈 개수 > 0 
         if (getRemainQuizCount() > 0)
-        {   
+        {
             //게임유무가 true이고 퀴즈시작시간 > 0
             if (!isCompetitionPlay() && mRemainCompetitionTime > 0)
             {
@@ -206,7 +206,7 @@ public class QuizManager : MonoBehaviour
             }
             //다음 문제시간(지금설정 5초) > 0
             else if (NextAnswerDelayTimeOut > 0)
-            { 
+            {
 
             }
             //남은 퀴즈 개수가 0보다 이하일때 다음 게임으로 

@@ -2,29 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerDate : MonoBehaviour
+public class MainClient : MonoBehaviour
 {
-    static public void qv(string s1) { Debug.Log(s1); }
-
-    public class ObjP
-    {
-        public string mName;
-        public string mNftAddr;
-
-
-        public void posiSend(Client ct, bool saveDB = false)
+        public class Obj1
         {
-            using (JcCtUnity1.PkWriter1Nm pkw = new JcCtUnity1.PkWriter1Nm(111))
+            public string mContent, mAnswer;
+        }
+
+        public class ObjP
+        {
+            public string mName;
+            public string mNftAddr;
+
+
+            public void posiSend(Client ct, bool saveDB = false)
             {
-                pkw.wStr1(mName);
-                pkw.wStr1(mNftAddr);
-                ct.send(pkw);
+                using (JcCtUnity1.PkWriter1Nm pkw = new JcCtUnity1.PkWriter1Nm(111))
+                {
+                    pkw.wStr1(mName);
+                    pkw.wStr1(mNftAddr);
+                    ct.send(pkw);
+                }
             }
         }
-    }
+        public List<Obj1> mlist()
+        {
+            return dbList;
+        }
 
     public class Client : JcCtUnity1.JcCtUnity1
     {
+        static public void qv(string s1) { Debug.Log(s1); }
 
         public Client() : base(System.Text.Encoding.Unicode) { }
 
@@ -46,6 +54,29 @@ public class PlayerDate : MonoBehaviour
         {
             switch (pkrd.getPkt())
             {
+                case 100:
+                    {
+
+                        dbList = new List<Obj1>();
+                        var count = pkrd.rInt32s();
+
+                        var s1 = "";
+                        var s2 = "";
+
+                        for (int i = 0; i < count; i++)
+                        {
+                            Obj1 mObj1 = new Obj1();
+                            s1 = pkrd.rStr1def();
+                            s2 = pkrd.rStr1def();
+
+                            qv("ServerEnter ¼ö½Å s1: " + s1 + " s2 : " + s2);
+                            mObj1.mContent = s1;
+                            mObj1.mAnswer = s2;
+                            dbList.Add(mObj1);
+                            qv("dbList : " + dbList.Count);
+                        }
+                    }
+                    break;
                 case 101:
                     {
                         pdbList = new List<ObjP>();
@@ -74,15 +105,18 @@ public class PlayerDate : MonoBehaviour
     }
 
     public Client mCt;
-    static public List<ObjP> pdbList;
+
+    static public List<MainClient.ObjP> pdbList;
+    static public List<MainClient.Obj1> dbList;
 
     void Start()
     {
         mCt = new Client();
         mCt.connect("127.0.0.3", 7777);
-        Debug.Log("Player Start 1111");
+        Debug.Log("Client Start 1111");
     }
 
+    // Update is called once per frame
     void Update()
     {
         mCt.framemove();
