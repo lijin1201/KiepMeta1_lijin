@@ -22,6 +22,11 @@ public class PlayerMotion : MonoBehaviour
     public string a;
     public string b;
 
+    private KeyCode currentKeycode;
+    
+    private bool GetKey (KeyCode code) { return currentKeycode==code; }
+    public void SetKey(KeyCode code) {  currentKeycode = code; }
+
     public bool save = false;
     private void Start()
     {
@@ -39,7 +44,7 @@ public class PlayerMotion : MonoBehaviour
 
     }
 
-    private void Update()
+    public void ThisUpdate()
     {
         Move();
         Turn();
@@ -50,7 +55,7 @@ public class PlayerMotion : MonoBehaviour
     {
 
 
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
+        if (GetKey(KeyCode.W) || GetKey(KeyCode.S) || GetKey(KeyCode.A) || GetKey(KeyCode.D))
         {
             anim.SetBool("Run", true);
             anim.SetBool("Hello", false);
@@ -67,20 +72,20 @@ public class PlayerMotion : MonoBehaviour
     {
         Vector3 movement = Vector3.zero;
 
-        if (Input.GetKey(KeyCode.A))
+        if (GetKey(KeyCode.A))
         {
             movement.x = -1;
         }
-        else if (Input.GetKey(KeyCode.D))
+        else if (GetKey(KeyCode.D))
         {
             movement.x = 1;
         }
 
-        if (Input.GetKey(KeyCode.W))
+        if (GetKey(KeyCode.W))
         {
             movement.z = 1;
         }
-        else if (Input.GetKey(KeyCode.S))
+        else if (GetKey(KeyCode.S))
         {
             movement.z = -1;
         }
@@ -95,7 +100,7 @@ public class PlayerMotion : MonoBehaviour
 
     private void Motion()
     {
-        if (!(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)))
+        if (!(GetKey(KeyCode.W) || GetKey(KeyCode.S) || GetKey(KeyCode.A) || GetKey(KeyCode.D)))
         {
 
             if (Input.GetKeyDown(KeyCode.Alpha1))

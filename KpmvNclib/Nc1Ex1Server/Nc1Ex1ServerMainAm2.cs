@@ -50,7 +50,13 @@ namespace Nc1Ex1Server
                 mCs.Add(cti);
                 mNtte.QuizDataSend(this, cti);
                 mNttep.PlayerDataSend(this, cti);
-
+                using (var pkw = mMm.allocNw1pk(0xff))
+                {
+                    pkw.setType(2);
+                    pkw.wInt32s(mCs.Count);
+                    pkw.wInt32s((int)cti);
+                    send(cti, pkw);  //send to one
+                }
             }
 
             public override void onNccpcNwRecv(int cti, NccpcDll.NccpcNw1Pk2 ncpk)

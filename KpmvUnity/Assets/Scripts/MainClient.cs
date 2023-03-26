@@ -54,6 +54,61 @@ public class MainClient : MonoBehaviour
         {
             switch (pkrd.getPkt())
             {
+                case 2:
+                    {
+                        int id = pkrd.rInt32s();
+                        LcIPT.Instance.SetIndex( id - 1);
+                        int cti = pkrd.rInt32s();
+                        qv("server 수신 ID: " + id);
+                        qv("server 수신 cti: " + cti);
+                        if (id > LcIPT.maxP)
+                        {
+                            qv("인원수 초과");
+                            this.disconnect(); return false;                            
+                        }
+                        LcIPT.Instance.currentSend(this);
+                        using (JcCtUnity1.PkWriter1Nm pkw = new JcCtUnity1.PkWriter1Nm(20))
+                        {
+                            pkw.wInt32s(LcIPT.Instance.GetIndex());
+                            this.send(pkw);
+                        }
+
+
+                        //request others to instantiate
+                    }
+                    break;
+
+                //request movesend all
+                case 20:
+                    {
+                        int pidx = pkrd.rInt32s();
+                        if (pidx != LcIPT.Instance.GetIndex())
+                        {
+                            LcIPT.Instance.currentSend(this);
+                        }
+                    }
+                    break;
+
+                case 3:
+                    {
+                        var pidx = pkrd.rInt32s();
+                        int code = pkrd.rInt32s();
+                        var xx = pkrd.rReal32();
+                        var yy = pkrd.rReal32();
+                        var zz = pkrd.rReal32();
+
+                        if (pidx>= LcIPT.Instance.mPlayers.Count)
+                        {
+                            LcIPT.Instance.InstantiatePlayer(pidx);
+                        }
+                        Debug.Log("server 수신 pidx: " + pidx);
+                        
+                        LcIPT.Instance.mPlayers[pidx].GetComponent<PlayerMotion>().SetKey((KeyCode)code);
+                        LcIPT.Instance.mPlayers[pidx].GetComponent<PlayerMotion>().ThisUpdate();
+                        LcIPT.Instance.mPlayers[pidx].transform.position = new Vector3(xx, yy, zz);
+                        Debug.Log("server 수신 2  pidx: " + pidx);
+                    }
+                    break;
                 case 100:
                     {
 

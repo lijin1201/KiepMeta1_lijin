@@ -4,22 +4,83 @@ using UnityEngine;
 
 public class LcIPT : MonoBehaviour
 {
-    const bool mbOnline = false;
+    public static LcIPT Instance;
+    const bool mbOnline = true;
     public float mJumpHeight = 2f;
 
-    void Start()
-    {
+    private MainClient mCf;
+    public GameObject playerPF;
+    public GameObject go;
+    public GameObject Camera;
 
+    public const int maxP = 2;
+    Vector3[] positions = { new Vector3(10, 40, 10), new Vector3(-10, 40, 10) };
+    Color[] colors = { Color.blue, Color.red };
+    public List<GameObject> mPlayers = new List<GameObject>();
+    private int pIndex=0;
+
+    public void SetIndex(int index) { 
+        pIndex = index;
+        for (int i = 0; i <= pIndex; i++)
+        {
+            InstantiatePlayer(i);
+        }
+        go = mPlayers[pIndex];
+        Camera.GetComponent<camera>().SetTarget(go);
     }
 
-    public void moveSend(JcCtUnity1.JcCtUnity1 ct, GameObject obj, float plusx, float plusy, float plusz)
+    public int GetIndex () { return pIndex; }
+
+    public void Awake()
     {
-        using (JcCtUnity1.PkWriter1Nm pkw = new JcCtUnity1.PkWriter1Nm(101))
+        if (Instance != null && Instance != this)
         {
-            pkw.wStr1(obj.name);
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+    void Start()
+    {
+        mCf = GetComponent<MainClient>();
+
+  
+        
+    }
+
+    public void InstantiatePlayer(int i)
+    {    
+        GameObject player = Instantiate(playerPF, positions[i], Quaternion.identity);
+        Transform head = player.transform.Find("Bone/Bone.001/Bone.002/Cube");
+        head.GetComponent<MeshRenderer>().material = new Material(Shader.Find("Diffuse"));
+        head.GetComponent<MeshRenderer>().material.SetColor("_Color", colors[i]);
+        mPlayers.Add(player);
+    }
+
+    public void moveSend(JcCtUnity1.JcCtUnity1 ct, GameObject obj, int code, float plusx, float plusy, float plusz)
+    {
+        using (JcCtUnity1.PkWriter1Nm pkw = new JcCtUnity1.PkWriter1Nm(3))
+        {
+            pkw.wInt32s(LcIPT.Instance.pIndex);
+            pkw.wInt32s(code);
             pkw.wReal32(obj.transform.position.x + plusx);
-            pkw.wReal32(obj.transform.position.x + plusy);
-            pkw.wReal32(obj.transform.position.x + plusz);
+            pkw.wReal32(obj.transform.position.y + plusy);
+            pkw.wReal32(obj.transform.position.z + plusz);
+            ct.send(pkw);
+        }
+    }
+
+    public void currentSend(JcCtUnity1.JcCtUnity1 ct)
+    {
+        using (JcCtUnity1.PkWriter1Nm pkw = new JcCtUnity1.PkWriter1Nm(3))
+        {
+            pkw.wInt32s(LcIPT.Instance.pIndex);
+            pkw.wInt32s(0);
+            pkw.wReal32(go.transform.position.x );
+            pkw.wReal32(go.transform.position.y );
+            pkw.wReal32(go.transform.position.z );
             ct.send(pkw);
         }
     }
@@ -32,7 +93,7 @@ public class LcIPT : MonoBehaviour
     void Move()
     {
         float spd = 10.0f * Time.deltaTime;
-        var go = GameObject.Find("Player");
+      
 
         if (go)
         {
@@ -41,7 +102,7 @@ public class LcIPT : MonoBehaviour
             {
                 if (mbOnline)
                 {
-                    moveSend(null, go, 0, 0, +spd);
+                    moveSend(mCf.mCt, go, (int)KeyCode.W,  0, 0, +spd);
                 }
                 else
                 {
@@ -53,7 +114,7 @@ public class LcIPT : MonoBehaviour
             {
                 if (mbOnline)
                 {
-                    moveSend(null, go, 0, 0, -spd);
+                    moveSend(mCf.mCt, go, (int)KeyCode.S, 0, 0, -spd);
                 }
                 else
                 {
@@ -65,7 +126,7 @@ public class LcIPT : MonoBehaviour
             {
                 if (mbOnline)
                 {
-                    moveSend(null, go, -spd, 0, 0);
+                    moveSend(mCf.mCt, go, (int)KeyCode.A, -spd, 0, 0);
                 }
                 else
                 {
@@ -77,7 +138,7 @@ public class LcIPT : MonoBehaviour
             {
                 if (mbOnline)
                 {
-                    moveSend(null, go, +spd, 0, 0);
+                    moveSend(mCf.mCt, go, (int)KeyCode.D, +spd, 0, 0);
                 }
                 else
                 {
@@ -91,7 +152,7 @@ public class LcIPT : MonoBehaviour
                 {
                     if (mbOnline)
                     {
-                        moveSend(null, go, 0, mJumpHeight, 0);
+                        moveSend(mCf.mCt, go, (int)KeyCode.Space, 0, mJumpHeight, 0);
                     }
                     else
                     {
