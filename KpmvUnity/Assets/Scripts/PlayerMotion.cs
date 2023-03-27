@@ -24,7 +24,16 @@ public class PlayerMotion : MonoBehaviour
 
     private KeyCode currentKeycode;
     
-    private bool GetKey (KeyCode code) { return currentKeycode==code; }
+    private bool GetKey (KeyCode code) {
+        if (LcIPT.Instance.isOnline())
+        {
+            return currentKeycode == code;
+        }
+        else
+        {
+            return Input.GetKey(code);
+        }
+    }
     public void SetKey(KeyCode code) {  currentKeycode = code; }
 
     public bool save = false;
@@ -42,6 +51,14 @@ public class PlayerMotion : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         terrain = GameObject.Find("Terrain");
 
+    }
+
+    public void Update()
+    {
+        if (!LcIPT.Instance.isOnline())
+        {
+            ThisUpdate();
+        }
     }
 
     public void ThisUpdate()

@@ -77,7 +77,16 @@ namespace Nc1Ex1Server
                     send(mCs, pkw);
                 }
             }
-            public override void onNccpcNwLeave(int cti) { qv("Dbg NwLeave ct:" + cti + " remain:" + (mCs.Count - 1)); mCs.Remove(cti); }
+            public override void onNccpcNwLeave(int cti) {
+                qv("Dbg NwLeave ct:" + cti + " remain:" + (mCs.Count - 1));
+                using (var pkw = mMm.allocNw1pk(0xff))
+                {
+                    pkw.setType(4);
+                    pkw.wInt32s((int)cti);
+                    send(mCs, pkw);
+                }
+                mCs.Remove(cti); 
+            }
 
         }
 

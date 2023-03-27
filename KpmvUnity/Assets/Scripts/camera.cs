@@ -17,6 +17,8 @@ public class camera : MonoBehaviour
     }
     void Update()
     {
-        transform.position = target.position + offset;
+        if (target) { 
+            transform.position = target.position + offset;
+        }
     }
 }

@@ -5,10 +5,11 @@ using UnityEngine;
 public class LcIPT : MonoBehaviour
 {
     public static LcIPT Instance;
-    const bool mbOnline = true;
+    private bool mbOnline = true;
     public float mJumpHeight = 2f;
 
     private MainClient mCf;
+    public GameObject splayer;
     public GameObject playerPF;
     public GameObject go;
     public GameObject Camera;
@@ -16,20 +17,52 @@ public class LcIPT : MonoBehaviour
     public const int maxP = 2;
     Vector3[] positions = { new Vector3(10, 40, 10), new Vector3(-10, 40, 10) };
     Color[] colors = { Color.blue, Color.red };
-    public List<GameObject> mPlayers = new List<GameObject>();
-    private int pIndex=0;
+    //public List<GameObject> mPlayers = new List<GameObject>();
+    public GameObject[] mPlayers;
+    public int?[] mCtis;
+    private int pIndex = -1;
 
-    public void SetIndex(int index) { 
-        pIndex = index;
-        for (int i = 0; i <= pIndex; i++)
+  
+    //public void setOffline() { 
+    //    mbOnline = false;
+    //    if (mCf.mCt.isConnected()) { DisConnect(); }
+    //    go = GameObject.Find("Player");
+    //}
+    public bool isOnline() { return mbOnline; }
+    public void SetIndex() {
+        StartCoroutine(waiter());
+        IEnumerator waiter()
         {
-            InstantiatePlayer(i);
+
+            yield return new WaitForSeconds(2);
+            pIndex = -1;
+            for (int i = 0; i < maxP; i++)
+            {
+                Debug.Log("mPlayers " + i + " : " + (mPlayers[i]==null? null: mPlayers[i]) );
+                Debug.Log("mCtis " + i + " : " + (mCtis[i] == null ? null : mCtis[i]) );
+            }
+                for (int i = 0; i < maxP; i++)
+            {
+                Debug.Log("index: " + i);
+                // if (!mPlayers[i]) { pIndex = i; break; }
+                if (mCtis[i]==null ) { pIndex = i; break; }
+            }
+
+            if (pIndex >= 0) {
+                InstantiatePlayer(pIndex);
+                go = mPlayers[pIndex];
+                Camera.GetComponent<camera>().SetTarget(go);
+                currentSend(mCf.mCt);
+                ctiSend(mCf.mCt);
+            } else
+            {
+                Debug.Log("인원수 초과2"); mCf.mCt.disconnect();
+            }
         }
-        go = mPlayers[pIndex];
-        Camera.GetComponent<camera>().SetTarget(go);
+
     }
 
-    public int GetIndex () { return pIndex; }
+    public int GetIndex() { return pIndex; }
 
     public void Awake()
     {
@@ -45,18 +78,48 @@ public class LcIPT : MonoBehaviour
     void Start()
     {
         mCf = GetComponent<MainClient>();
+        mPlayers = new GameObject[maxP];
+        mCtis = new int?[maxP];
 
-  
+
+    }
+
+    public void Connect() {
+        if (!mCf.mCt.isConnected()) {
+            go = null;
+            splayer.SetActive(false);
+            mCf.mCt.connect("127.0.0.3", 7777);
+            Debug.Log("Client Start 1111");
+        }
+        mbOnline = true;
         
     }
 
+    public void DisConnect()
+    {
+        if(mCf.mCt.isConnected()) { 
+            for (int i =0; i<maxP; i++) {
+                if (mPlayers[i])
+                {
+                    Destroy(mPlayers[i]);
+                    Debug.Log("Destroy pidx: " + i);
+                }
+                mCtis[i] = null;
+            }
+            pIndex = -1;
+            mCf.mCt.disconnect();
+            mbOnline = false;
+            go = splayer;
+            go.SetActive(true);
+        }
+    }
     public void InstantiatePlayer(int i)
     {    
         GameObject player = Instantiate(playerPF, positions[i], Quaternion.identity);
         Transform head = player.transform.Find("Bone/Bone.001/Bone.002/Cube");
         head.GetComponent<MeshRenderer>().material = new Material(Shader.Find("Diffuse"));
         head.GetComponent<MeshRenderer>().material.SetColor("_Color", colors[i]);
-        mPlayers.Add(player);
+        mPlayers[i]=player;
     }
 
     public void moveSend(JcCtUnity1.JcCtUnity1 ct, GameObject obj, int code, float plusx, float plusy, float plusz)
@@ -68,6 +131,16 @@ public class LcIPT : MonoBehaviour
             pkw.wReal32(obj.transform.position.x + plusx);
             pkw.wReal32(obj.transform.position.y + plusy);
             pkw.wReal32(obj.transform.position.z + plusz);
+            ct.send(pkw);
+        }
+    }
+
+    public void ctiSend(MainClient.Client ct)
+    {
+        using (JcCtUnity1.PkWriter1Nm pkw = new JcCtUnity1.PkWriter1Nm(30))
+        {
+            pkw.wInt32s(LcIPT.Instance.pIndex);
+            pkw.wInt32s(ct.cti);
             ct.send(pkw);
         }
     }
