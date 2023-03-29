@@ -86,8 +86,8 @@ public class MainClient : MonoBehaviour
                         int pidx = pkrd.rInt32s();
                         if (pidx != LcIPT.Instance.GetIndex())
                         {
-                            LcIPT.Instance.currentSend(this);
                             LcIPT.Instance.ctiSend(this);
+                            LcIPT.Instance.currentSend(this);                   
                         }
                     }
                     break;
@@ -100,27 +100,47 @@ public class MainClient : MonoBehaviour
                         var yy = pkrd.rReal32();
                         var zz = pkrd.rReal32();
 
-                        if (pidx>=0 && LcIPT.Instance.mPlayers[pidx] == null) // pidx >= LcIPT.Instance.mPlayers.Count)
+                        if (code == 0 || code == 1)
                         {
-                            LcIPT.Instance.InstantiatePlayer(pidx);
-                            Debug.Log("server 수신 pidx: " + pidx);
-                        }
-                        
+                            if (pidx >= 0  )
+                            {
+                                Debug.Log("server 수신 pidx: " + pidx);
+                                if (LcIPT.Instance.mPlayers[pidx] == null)
+                                {
+                                    LcIPT.Instance.InstantiatePlayer(pidx);
 
-                        LcIPT.Instance.mPlayers[pidx].GetComponent<PlayerMotion>().SetKey((KeyCode)code);
-                        LcIPT.Instance.mPlayers[pidx].GetComponent<PlayerMotion>().ThisUpdate();
-                        LcIPT.Instance.mPlayers[pidx].transform.position = new Vector3(xx, yy, zz);
-                        Debug.Log("server 수신 2  pidx: " + pidx);
+                                }
+                                else if (code == 0 && pidx == LcIPT.Instance.GetIndex() && cti!= LcIPT.Instance.mCtis[pidx])
+                                {
+                                    LcIPT.Instance.SetIndex(0f);
+                                }
+                                LcIPT.Instance.mPlayers[pidx].GetComponent<PlayerMotion>().SetKey((KeyCode)code);
+                                LcIPT.Instance.mPlayers[pidx].GetComponent<PlayerMotion>().ThisUpdate();
+                                LcIPT.Instance.mPlayers[pidx].transform.position = new Vector3(xx, yy, zz);
+                            }
+                        }
+                        else
+                        {   
+                            if (pidx >= 0)
+                            {
+                                LcIPT.Instance.mPlayers[pidx].GetComponent<PlayerMotion>().SetKey((KeyCode)code);
+                                LcIPT.Instance.mPlayers[pidx].GetComponent<PlayerMotion>().ThisUpdate();
+                                LcIPT.Instance.mPlayers[pidx].transform.position = new Vector3(xx, yy, zz);
+                            }
+                            Debug.Log("server 수신 2  pidx: " + pidx);
+                        }
                     }
                     break;
                 case 30:
                     {
                         var pidx = pkrd.rInt32s();
                         int cti = pkrd.rInt32s();
+                        int isNew = pkrd.rInt32s();
 
-                        //if (LcIPT.Instance.mCtis[pidx] == null) // pidx >= LcIPT.Instance.mPlayers.Count)
+                        //if (LcIPT.Instance.mCtis[pidx] == null) 
                         //{
-                         LcIPT.Instance.mCtis[pidx] = cti;
+                        if ( LcIPT.Instance.mCtis[pidx] == null || isNew==0 )
+                            LcIPT.Instance.mCtis[pidx] = cti;
                         //}
                         Debug.Log(" 수신 Set cti;  pidx: " + pidx + "cti: " + cti);
                     }

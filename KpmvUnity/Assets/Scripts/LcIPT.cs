@@ -22,19 +22,20 @@ public class LcIPT : MonoBehaviour
     public int?[] mCtis;
     private int pIndex = -1;
 
-  
+    Vector3 lastPos;
+
     //public void setOffline() { 
     //    mbOnline = false;
     //    if (mCf.mCt.isConnected()) { DisConnect(); }
     //    go = GameObject.Find("Player");
     //}
     public bool isOnline() { return mbOnline; }
-    public void SetIndex() {
+    public void SetIndex(float delay=1f) {
         StartCoroutine(waiter());
         IEnumerator waiter()
         {
 
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(delay);
             pIndex = -1;
             for (int i = 0; i < maxP; i++)
             {
@@ -52,8 +53,8 @@ public class LcIPT : MonoBehaviour
                 InstantiatePlayer(pIndex);
                 go = mPlayers[pIndex];
                 Camera.GetComponent<camera>().SetTarget(go);
-                currentSend(mCf.mCt);
-                ctiSend(mCf.mCt);
+                ctiSend(mCf.mCt,1);
+                currentSend(mCf.mCt,1);        
             } else
             {
                 Debug.Log("인원수 초과2"); mCf.mCt.disconnect();
@@ -86,6 +87,7 @@ public class LcIPT : MonoBehaviour
 
     public void Connect() {
         if (!mCf.mCt.isConnected()) {
+            DisConnect();
             go = null;
             splayer.SetActive(false);
             mCf.mCt.connect("127.0.0.3", 7777);
@@ -97,21 +99,21 @@ public class LcIPT : MonoBehaviour
 
     public void DisConnect()
     {
-        if(mCf.mCt.isConnected()) { 
-            for (int i =0; i<maxP; i++) {
-                if (mPlayers[i])
-                {
-                    Destroy(mPlayers[i]);
-                    Debug.Log("Destroy pidx: " + i);
-                }
-                mCtis[i] = null;
+        
+        for (int i =0; i<maxP; i++) {
+            if (mPlayers[i])
+            {
+                Destroy(mPlayers[i]);
+                Debug.Log("Destroy pidx: " + i);
             }
-            pIndex = -1;
-            mCf.mCt.disconnect();
-            mbOnline = false;
-            go = splayer;
-            go.SetActive(true);
+            mCtis[i] = null;
         }
+        pIndex = -1;
+        mCf.mCt.disconnect();
+        mbOnline = false;
+        go = splayer;
+        go.SetActive(true);
+        Camera.GetComponent<camera>().SetTarget(go);
     }
     public void InstantiatePlayer(int i)
     {    
@@ -135,22 +137,23 @@ public class LcIPT : MonoBehaviour
         }
     }
 
-    public void ctiSend(MainClient.Client ct)
+    public void ctiSend(MainClient.Client ct, int isNew = 0)
     {
         using (JcCtUnity1.PkWriter1Nm pkw = new JcCtUnity1.PkWriter1Nm(30))
         {
             pkw.wInt32s(LcIPT.Instance.pIndex);
             pkw.wInt32s(ct.cti);
+            pkw.wInt32s(isNew);
             ct.send(pkw);
         }
     }
 
-    public void currentSend(JcCtUnity1.JcCtUnity1 ct)
+    public void currentSend(JcCtUnity1.JcCtUnity1 ct, int isNew = 0)
     {
         using (JcCtUnity1.PkWriter1Nm pkw = new JcCtUnity1.PkWriter1Nm(3))
         {
             pkw.wInt32s(LcIPT.Instance.pIndex);
-            pkw.wInt32s(0);
+            pkw.wInt32s(isNew);
             pkw.wReal32(go.transform.position.x );
             pkw.wReal32(go.transform.position.y );
             pkw.wReal32(go.transform.position.z );
@@ -170,6 +173,11 @@ public class LcIPT : MonoBehaviour
 
         if (go)
         {
+            if (go.transform.position != lastPos)
+            {
+                //Player has moved
+                moveSend(mCf.mCt, go, 10, 0, 0, 0);
+            }
 
             if (Input.GetKey(KeyCode.W))
             {
@@ -235,6 +243,7 @@ public class LcIPT : MonoBehaviour
                     go.GetComponent<PlayerMotion>().isGrounded = false;
                 }
             }
+            lastPos = go.transform.position;
         }
     }
 }
